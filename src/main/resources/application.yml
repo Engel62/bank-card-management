@@ -1,0 +1,54 @@
+spring:
+  application:
+    name: bank-card-management
+
+  # ИСПОЛЬЗУЕМ H2 В ПАМЯТИ
+  datasource:
+    url: jdbc:h2:mem:bankdb;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop  # ← Hibernate сам создаст таблицы
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        format_sql: true
+    show-sql: true
+
+  # ВРЕМЕННО ОТКЛЮЧАЕМ LIQUIBASE
+  liquibase:
+    enabled: false
+
+  # Консоль H2 (доступна по адресу: http://localhost:8080/h2-console)
+  h2:
+    console:
+      enabled: false
+      path: /h2-console
+      settings:
+        trace: false
+        web-allow-others: false
+
+server:
+  port: 8080
+
+# Настройки безопасности
+app:
+  security:
+    jwt:
+      secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+      expiration: 86400000 # 24 hours
+  card:
+    encryption:
+      key: 12345678901234567890123456789012 # 32 chars for AES-256
+      algorithm: AES/CBC/PKCS5Padding
+
+# Логирование
+logging:
+  level:
+    com.bank.card: DEBUG
+    org.springframework: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
