@@ -48,14 +48,12 @@ public class TransferService {
             throw new InsufficientFundsException("Insufficient funds");
         }
 
-        // Выполнить перевод
         fromCard.setBalance(fromCard.getBalance().subtract(request.getAmount()));
         toCard.setBalance(toCard.getBalance().add(request.getAmount()));
 
         cardRepository.save(fromCard);
         cardRepository.save(toCard);
 
-        // Создать запись о транзакции
         Transaction transaction = Transaction.builder()
                 .transactionId(UUID.randomUUID().toString())
                 .fromCard(fromCard)
